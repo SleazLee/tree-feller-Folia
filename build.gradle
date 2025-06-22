@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.thizthizzydizzy'
+version = '1.25.1'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly files('libs/mcMMO.jar')
+    compileOnly files('libs/lands-api-7.0.2.jar')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+

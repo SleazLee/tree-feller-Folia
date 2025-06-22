@@ -9,7 +9,7 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
+import com.thizthizzydizzy.treefeller.Scheduler;
 import org.bukkit.util.Vector;
 public enum FellBehavior{
     BREAK(Material.COBBLESTONE, "blocks will break and fall as items"){
@@ -200,12 +200,8 @@ public enum FellBehavior{
         block.setType(Material.AIR);
         int delay = Option.FALL_DELAY.get(tool, tree);
         if(delay>0){
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    processFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, directionalFallVelocity, rotate, overridables, randomFallVelocity, explosiveFallVelocity, verticalFallVelocity);
-                }
-            }.runTaskLater(plugin, delay);
+            Scheduler.runLater(() ->
+                    processFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, directionalFallVelocity, rotate, overridables, randomFallVelocity, explosiveFallVelocity, verticalFallVelocity), delay);
         }
         else processFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, directionalFallVelocity, rotate, overridables, randomFallVelocity, explosiveFallVelocity, verticalFallVelocity);
     }
@@ -252,12 +248,8 @@ public enum FellBehavior{
         block.setType(Material.AIR);
         int delay = Option.FALL_DELAY.get(tool, tree);
         if(delay>0){
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    processNaturalFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, rotate, overridables, verticalFallVelocity);
-                }
-            }.runTaskLater(plugin, delay);
+            Scheduler.runLater(() ->
+                    processNaturalFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, rotate, overridables, verticalFallVelocity), delay);
         }
         else processNaturalFallBehavior(data, detectedTree, hurt, doBreak, inventory, plugin, dropItems, tree, tool, axe, block, origin, lowest, player, seed, modifiers, directionalFallBehavior, lockCardinal, rotate, overridables, verticalFallVelocity);
     }

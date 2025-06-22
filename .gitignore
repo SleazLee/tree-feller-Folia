@@ -1,3 +1,7 @@
 /build/
 /dist/
 /nbproject/private/
+target/
+
+# Local dependencies
+libs/

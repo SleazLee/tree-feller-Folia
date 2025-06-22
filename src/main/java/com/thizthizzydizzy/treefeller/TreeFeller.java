@@ -52,9 +52,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+import com.thizthizzydizzy.treefeller.Scheduler;
 public class TreeFeller extends JavaPlugin{
+    private static TreeFeller instance;
     public static ArrayList<Tool> tools = new ArrayList<>();
     public static ArrayList<Tree> trees = new ArrayList<>();
     public static ArrayList<Effect> effects = new ArrayList<>();
@@ -68,7 +68,11 @@ public class TreeFeller extends JavaPlugin{
     ArrayList<Cascade> pendingCascades = new ArrayList<>();
     private static final HashMap<Material, int[]> exp = new HashMap<>();
     public final ArrayList<String> patrons = new ArrayList<>();
-    private BukkitTask cascadeTask;
+    private Scheduler.Task cascadeTask;
+
+    public static TreeFeller getInstance(){
+        return instance;
+    }
     {//fallback list in case downloading fails
         patrons.add("Thalzamar");
         patrons.add("Mstk");
@@ -252,36 +256,30 @@ public class TreeFeller extends JavaPlugin{
                     for(Block d : detectedTree.getDecorations(b))droppedItems.addAll(getDrops(d, tool, tree, axe, new int[1]));
                     ttl--;
                 }
-                new BukkitRunnable() {
-                    @Override
-                    public void run(){
-                        int tTl = TTL;
-                        for(Block b : detectedTree.trunk.get(i)){
-                            if(tTl<=0)break;
-                            for(Block leaf : toList(getBlocksWithLeafCheck(tree.trunk, tree.leaves, b, Option.LEAF_BREAK_RANGE.get(tool, tree), Option.DIAGONAL_LEAVES.get(tool, tree), Option.PLAYER_LEAVES.get(tool, tree), Option.IGNORE_LEAF_DATA.get(tool, tree), Option.FORCE_DISTANCE_CHECK.get(tool, tree)))){
-                                breakBlock(detectedTree, dropItems, tree, tool, axe, leaf, block, lowest, player, seed, true);
-                                for(Block d : detectedTree.getDecorations(leaf))breakBlock(detectedTree, dropItems, tree, tool, axe, d, block, lowest, player, seed, true);
-                            }
-                            breakBlock(detectedTree, dropItems, tree, tool, axe, b, block, lowest, player, seed, false);
-                            for(Block d : detectedTree.getDecorations(b))breakBlock(detectedTree, dropItems, tree, tool, axe, d, block, lowest, player, seed, false);
-                            tTl--;
+                Scheduler.runLater(() -> {
+                    int tTl = TTL;
+                    for(Block b : detectedTree.trunk.get(i)){
+                        if(tTl<=0)break;
+                        for(Block leaf : toList(getBlocksWithLeafCheck(tree.trunk, tree.leaves, b, Option.LEAF_BREAK_RANGE.get(tool, tree), Option.DIAGONAL_LEAVES.get(tool, tree), Option.PLAYER_LEAVES.get(tool, tree), Option.IGNORE_LEAF_DATA.get(tool, tree), Option.FORCE_DISTANCE_CHECK.get(tool, tree)))){
+                            breakBlock(detectedTree, dropItems, tree, tool, axe, leaf, block, lowest, player, seed, true);
+                            for(Block d : detectedTree.getDecorations(leaf))breakBlock(detectedTree, dropItems, tree, tool, axe, d, block, lowest, player, seed, true);
                         }
-                        processNaturalFalls();
+                        breakBlock(detectedTree, dropItems, tree, tool, axe, b, block, lowest, player, seed, false);
+                        for(Block d : detectedTree.getDecorations(b))breakBlock(detectedTree, dropItems, tree, tool, axe, d, block, lowest, player, seed, false);
+                        tTl--;
                     }
-                }.runTaskLater(this, delay);
+                    processNaturalFalls();
+                }, delay);
                 Ttl += detectedTree.trunk.get(i).size();
             }
             Integer maxSaplings = Option.MAX_SAPLINGS.get(tool, tree);
             if(maxSaplings!=null&&maxSaplings>=1){
                 if(Option.SPAWN_SAPLINGS.get(tool, tree)==2){
-                    new BukkitRunnable() {
-                        @Override
-                        public void run(){
-                            for(Sapling s : detectedTree.saplings){
-                                s.place(null);
-                            }
+                    Scheduler.runLater(() -> {
+                        for(Sapling s : detectedTree.saplings){
+                            s.place(null);
                         }
-                    }.runTaskLater(this, delay+1);
+                    }, delay+1);
                 }
             }
         }else{//TODO what about dropped items?
@@ -625,6 +623,7 @@ public class TreeFeller extends JavaPlugin{
     }
     @Override
     public void onEnable(){
+        instance = this;
         PluginDescriptionFile pdfFile = getDescription();
         Logger logger = getLogger();
         //<editor-fold defaultstate="collapsed" desc="Register Events">
@@ -647,15 +646,11 @@ public class TreeFeller extends JavaPlugin{
         getCommand("treefeller").setExecutor(new CommandTreeFeller(this));
         logger.log(Level.INFO, "{0} has been enabled! (Version {1}) by ThizThizzyDizzy", new Object[]{pdfFile.getName(), pdfFile.getVersion()});
         reload();
-        new BukkitRunnable() {
-            @Override
-            public void run(){
-                refreshPatronsList();
-            }
-        }.runTaskAsynchronously(this);
+        Scheduler.runAsync(this::refreshPatronsList);
     }
     @Override
     public void onDisable(){
+        instance = null;
         PluginDescriptionFile pdfFile = getDescription();
         Logger logger = getLogger();
         logger.log(Level.INFO, "{0} has been disabled! (Version {1}) by ThizThizzyDizzy", new Object[]{pdfFile.getName(), pdfFile.getVersion()});
@@ -984,14 +979,12 @@ public class TreeFeller extends JavaPlugin{
     private void cascade(DetectedTree detectedTree, boolean dropItems, Tree tree, Tool tool, ItemStack axe, Block block, Player player){
         pendingCascades.add(new Cascade(detectedTree, dropItems, tree, tool, axe, block, player));
         if(cascadeTask==null){
-            cascadeTask = new BukkitRunnable(){
-                @Override
-                public void run(){
-                    int maxChecks = Option.CASCADE_CHECK_LIMIT.getValue();
-                    int maxCascades = Option.PARALLEL_CASCADE_LIMIT.getValue();
-                    int checks = 0;
-                    int cascades = 0;
-                    while(checks<maxChecks&&cascades<maxCascades&&!pendingCascades.isEmpty()){
+            cascadeTask = Scheduler.runTimer(() -> {
+                int maxChecks = Option.CASCADE_CHECK_LIMIT.getValue();
+                int maxCascades = Option.PARALLEL_CASCADE_LIMIT.getValue();
+                int checks = 0;
+                int cascades = 0;
+                while(checks<maxChecks&&cascades<maxCascades&&!pendingCascades.isEmpty()){
                         checks++;
                         Cascade cascade = pendingCascades.remove(0);
                         ArrayList<Tree> trees = Option.CASCADE_TREES.get(cascade.tool, cascade.tree);
@@ -1038,8 +1031,7 @@ public class TreeFeller extends JavaPlugin{
                         cascadeTask.cancel();
                         cascadeTask = null;
                     }
-                }
-            }.runTaskTimer(this, 1, 1);
+            }, 1, 1);
         }
     }
     public boolean cascading = false;
@@ -1387,23 +1379,20 @@ public class TreeFeller extends JavaPlugin{
         if(theLeafRange>Option.LEAF_DETECT_RANGE.getValue())Option.LEAF_DETECT_RANGE.treeValues.put(tree, theLeafRange);
         return tree;
     }
-    BukkitTask saplingHandler;
+    Scheduler.Task saplingHandler;
     private void createSaplingHandler(){
         if(saplingHandler!=null)return;
-        saplingHandler = new BukkitRunnable() {
-            @Override
-            public void run(){
-                for(Iterator<Sapling> it = saplings.iterator(); it.hasNext();){
-                    Sapling sapling = it.next();
-                    sapling.tick();
-                    if(sapling.isDead())it.remove();
-                }
-                if(saplings.isEmpty()){
-                    saplingHandler = null;
-                    cancel();
-                }
+        saplingHandler = Scheduler.runTimer(() -> {
+            for(Iterator<Sapling> it = saplings.iterator(); it.hasNext();){
+                Sapling sapling = it.next();
+                sapling.tick();
+                if(sapling.isDead())it.remove();
             }
-        }.runTaskTimer(this, 0, 1);
+            if(saplings.isEmpty()){
+                saplingHandler = null;
+                Scheduler.cancelCurrentTask();
+            }
+        }, 0, 1);
     }
     /**
      * Handle dropped item. Item has already dropped; this handles it for sapling replant & compatibilities

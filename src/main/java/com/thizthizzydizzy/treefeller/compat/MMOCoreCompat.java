@@ -17,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import com.thizthizzydizzy.treefeller.Scheduler;
 import static com.thizthizzydizzy.treefeller.DebugResult.Type.*;
 
 public class MMOCoreCompat extends InternalCompatibility{
@@ -556,7 +557,8 @@ public class MMOCoreCompat extends InternalCompatibility{
             net.Indyuce.mmocore.api.block.BlockInfo info = net.Indyuce.mmocore.MMOCore.plugin.mineManager.getInfo( block );
             String savedData = block.getBlockData( ).getAsString( );
             if( info != null && info.hasRegen( ) ){
-                Bukkit.getScheduler( ).runTaskLater( net.Indyuce.mmocore.MMOCore.plugin, () -> net.Indyuce.mmocore.MMOCore.plugin.mineManager.initialize( info.startRegeneration( Bukkit.createBlockData( savedData ), block.getLocation( ) ), true ), 1 );
+                Scheduler.runLater(() -> net.Indyuce.mmocore.MMOCore.plugin.mineManager.initialize(
+                        info.startRegeneration(Bukkit.createBlockData(savedData), block.getLocation()), true), 1);
             }
         }
     }

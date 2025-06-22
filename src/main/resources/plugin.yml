@@ -1,6 +1,7 @@
 main: com.thizthizzydizzy.treefeller.TreeFeller
 version: 1.25.1
 api-version: 1.16
+folia-supported: true
 author: ThizThizzyDizzy
 website: "https://www.spigotmc.org/resources/thizzyz-tree-feller.64346/"
 name: TreeFeller
@@ -10,20 +11,5 @@ commands:
         usage: /treefeller (help|toggle [on|off]|on|off|reload|debug [on|off]|config)
 softdepend:
   - mcMMO
-  - CoreProtect
-  - WorldGuard
-  - WorldEdit
-  - Towny
-  - OreRegenerator
-  - Drop2Inventory
-  - Drop2InventoryPlus
-  - Jobs
-  - EcoSkills
-  - LogBlock
   - Lands
-  - PlaceholderAPI
-  - SaberFactions
-  - AureliumSkills
-  - AuraSkills
-  - Prism
   
