@@ -133,3 +133,19 @@ When you update the tree feller, make sure to add any missing configuration opti
 
 Discord
 https://discord.gg/dhcPSMt
+
+## Building
+This project can be built using **Maven** or **Gradle**.
+Place `mcMMO.jar` and `lands-api-7.0.2.jar` inside the `libs` directory before compiling.
+
+To build with Maven:
+```
+mvn package
+```
+
+To build with Gradle:
+```
+gradle build
+```
+
+The Vanillify library used by the plugin is included in the source tree and does not require any additional setup.

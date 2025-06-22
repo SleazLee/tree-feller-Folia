@@ -27,6 +27,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import com.thizthizzydizzy.treefeller.Scheduler;
 
 /**
  * An anvil gui, used for gathering a user's input
@@ -632,7 +633,7 @@ public class AnvilGUI {
 
             // If no executor is specified, execute all tasks with the BukkitScheduler
             if (mainThreadExecutor == null) {
-                mainThreadExecutor = task -> Bukkit.getScheduler().runTask(plugin, task);
+                mainThreadExecutor = task -> Scheduler.run(task);
             }
 
             final AnvilGUI anvilGUI = new AnvilGUI(

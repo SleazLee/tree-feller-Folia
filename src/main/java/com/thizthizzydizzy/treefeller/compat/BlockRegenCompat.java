@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
+import com.thizthizzydizzy.treefeller.Scheduler;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class BlockRegenCompat extends InternalCompatibility{
 		}
 		nl.aurorion.blockregen.system.regeneration.struct.RegenerationProcess proc = brPlugin.getRegenerationManager( ).createProcess( block, preset );
 		
-		if( proc != null ){
-			long tl = preset == null ? 1000 : preset.getDelay().getInt() * 1000L;
-			BukkitTask task = Bukkit.getScheduler().runTaskLaterAsynchronously(brPlugin, proc, tl / 50L);
-		}
-	}
+                if( proc != null ){
+                        long tl = preset == null ? 1000 : preset.getDelay().getInt() * 1000L;
+                        Scheduler.runAsyncLater(proc, tl / 50L);
+                }
+        }
 	
 	@Override
 	public boolean defaultEnabled(){

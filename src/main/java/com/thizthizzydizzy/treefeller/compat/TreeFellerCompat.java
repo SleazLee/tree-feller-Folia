@@ -17,27 +17,9 @@ import org.bukkit.inventory.ItemStack;
 public class TreeFellerCompat{
     private static final ArrayList<PluginCompatibility> compatibilities = new ArrayList<>();
     static{
-        compatibilities.add(new MMOCoreCompat());
-        compatibilities.add(new JobsRebornCompat());
         compatibilities.add(new McMMOCompat());
         compatibilities.add(new McMMOClassicCompat());
-        compatibilities.add(new CoreProtectCompat());
-        compatibilities.add(new WorldGuardCompat());
-        compatibilities.add(new GriefPreventionCompat());
-        compatibilities.add(new TownyCompat());
-        compatibilities.add(new OreRegeneratorCompat());
-        compatibilities.add(new Drop2InventoryCompat());
-        compatibilities.add(new EcoSkillsCompat());
-        compatibilities.add(new EcoJobsCompat());
-        compatibilities.add(new LegacyLogBlockCompat());
-        compatibilities.add(new LogBlockCompat());
         compatibilities.add(new LandsCompat());
-        compatibilities.add(new PlaceholderAPICompat());
-        compatibilities.add(new SaberFactionsCompat());
-        compatibilities.add(new AureliumSkillsCompat());
-        compatibilities.add(new AuraSkillsCompat());
-        compatibilities.add(new BlockRegenCompat());
-        compatibilities.add(new PrismCompat());
     }
     public static void init(TreeFeller treefeller){
         if(treefeller!=null){

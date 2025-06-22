@@ -15,7 +15,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import com.thizthizzydizzy.treefeller.Scheduler;
 public abstract class Menu{
     public final Plugin plugin;
     public final Player player;
@@ -61,20 +61,10 @@ public abstract class Menu{
     public final void openAnvilGUI(String initialText, String title, BiConsumer<Player, String> completeFunction){
         close();
         new AnvilGUI.Builder().text(initialText).plugin(plugin).title(title).itemLeft(new ItemBuilder(Material.PAPER).setDisplayName(initialText).build()).onClose((plyr) -> {
-            new BukkitRunnable() {
-                @Override
-                public void run(){
-                    open(Menu.this);
-                }
-            }.runTask(plugin);
+            Scheduler.run(() -> open(Menu.this));
         }).onClick((i, state) -> {
             completeFunction.accept(state.getPlayer(), state.getText());
-            new BukkitRunnable() {
-                @Override
-                public void run(){
-                    open(Menu.this);
-                }
-            }.runTask(plugin);
+            Scheduler.run(() -> open(Menu.this));
             return Arrays.asList(AnvilGUI.ResponseAction.close());
         }).open(player);
     }
@@ -94,12 +84,7 @@ public abstract class Menu{
      * Only called when closed by an external source, such as the player
      */
     public void onClose(){
-        new BukkitRunnable(){
-            @Override
-            public void run(){
-                open(parent);//WHY doesn't this work on the same thread? I dunno.
-            }
-        }.runTask(plugin);
+        Scheduler.run(() -> open(parent));//WHY doesn't this work on the same thread? I dunno.
     }
     public void onOpen(){}
     public void onVoidClicked(){}

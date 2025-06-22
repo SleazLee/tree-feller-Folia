@@ -1,5 +1,5 @@
 package com.thizthizzydizzy.treefeller.compat;
-import com.archyx.aureliumskills.skills.Skill;
+import dev.aurelium.auraskills.api.skill.Skill;
 import com.thizthizzydizzy.simplegui.ItemBuilder;
 import com.thizthizzydizzy.treefeller.Modifier;
 import com.thizthizzydizzy.treefeller.Option;
@@ -11,6 +11,7 @@ import com.thizthizzydizzy.treefeller.menu.MenuGlobalConfiguration;
 import com.thizthizzydizzy.treefeller.menu.MenuToolConfiguration;
 import com.thizthizzydizzy.treefeller.menu.MenuTreeConfiguration;
 import com.thizthizzydizzy.treefeller.menu.modify.MenuModifyStringDoubleMap;
+import dev.aurelium.auraskills.api.registry.NamespacedId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +20,15 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
-public class AureliumSkillsCompat extends InternalCompatibility{
-    public static Option<HashMap<String, Double>> AURELIUMSKILLS_TRUNK_XP = new Option<HashMap<String, Double>>("AureliumSkills Trunk XP", true, false, true, new HashMap<>(), "\n   - foraging: 1"){
+import com.thizthizzydizzy.treefeller.Scheduler;
+public class AuraSkillsCompat extends InternalCompatibility{
+    public static Option<HashMap<String, Double>> AURASKILLS_TRUNK_XP = new Option<HashMap<String, Double>>("AuraSkills Trunk XP", true, false, true, new HashMap<>(), "\n   - auraskills/foraging: 1"){
         @Override
         public String getDesc(boolean ingame){
             return "EXP will be provided to these skills when a tree is felled\n"
                     + "EXP is provided per-block (a value of 1 means 1 EXP per block of trunk)"+(ingame?"":("\n"
                     + "ex:\n"
-                    + "- foraging: 8"));
+                    + "- auraskills/foraging: 8"));
         }
         @Override
         public HashMap<String, Double> load(Object o){
@@ -129,13 +129,13 @@ public class AureliumSkillsCompat extends InternalCompatibility{
             return s+"}";
         }
     };
-    public static Option<HashMap<String, Double>> AURELIUMSKILLS_LEAVES_XP = new Option<HashMap<String, Double>>("AureliumSkills Leaves XP", true, false, true, new HashMap<>(), "\n   - foraging: 0"){
+    public static Option<HashMap<String, Double>> AURASKILLS_LEAVES_XP = new Option<HashMap<String, Double>>("AuraSkills Leaves XP", true, false, true, new HashMap<>(), "\n   - auraskills/foraging: 0"){
         @Override
         public String getDesc(boolean ingame){
             return "EXP will be provided to these skills when a tree is felled\n"
                     + "EXP is provided per-block (a value of 1 means 1 EXP per block of leaves)"+(ingame?"":("\n"
                     + "ex:\n"
-                    + "- foraging: 8"));
+                    + "- auraskills/foraging: 8"));
         }
         @Override
         public HashMap<String, Double> load(Object o){
@@ -236,23 +236,23 @@ public class AureliumSkillsCompat extends InternalCompatibility{
             return s+"}";
         }
     };
-    public static OptionBoolean AURELIUMSKILLS_APPLY_MODIFIERS = new OptionBoolean("AureliumSkills Apply Modifiers", true, true, true, true){
+    public static OptionBoolean AURASKILLS_APPLY_MODIFIERS = new OptionBoolean("AuraSkills Apply Modifiers", true, true, true, true){
         @Override
         public String getDesc(boolean ingame){
-            return "Should AureliumSkills modifiers be applied to experience earned through TreeFeller?";
+            return "Should AuraSkills modifiers be applied to experience earned through TreeFeller?";
         }
         @Override
         public ItemBuilder getConfigurationDisplayItem(Boolean value){
             return new ItemBuilder(Material.EXPERIENCE_BOTTLE);
         }
     };
-    private BukkitTask pendingTask = null;
+    private Scheduler.Task pendingTask = null;
     private TreeFeller treefeller;
-    private HashMap<Player, HashMap<com.archyx.aureliumskills.skills.Skill, Double>> modsMap = new HashMap<>();
-    private HashMap<Player, HashMap<com.archyx.aureliumskills.skills.Skill, Double>> noModsMap = new HashMap<>();
+    private HashMap<Player, HashMap<dev.aurelium.auraskills.api.skill.Skill, Double>> modsMap = new HashMap<>();
+    private HashMap<Player, HashMap<dev.aurelium.auraskills.api.skill.Skill, Double>> noModsMap = new HashMap<>();
     @Override
     public String getPluginName(){
-        return "AureliumSkills";
+        return "AuraSkills";
     }
     @Override
     public void init(TreeFeller treefeller){
@@ -263,17 +263,17 @@ public class AureliumSkillsCompat extends InternalCompatibility{
         if(player==null)return;
         HashMap<String, Double> xp = null;
         if(tree.trunk.contains(block.getType())){
-            xp = AURELIUMSKILLS_TRUNK_XP.get(tool, tree);
+            xp = AURASKILLS_TRUNK_XP.get(tool, tree);
         }else if(tree.leaves.contains(block.getType())){
-            xp = AURELIUMSKILLS_LEAVES_XP.get(tool, tree);
+            xp = AURASKILLS_LEAVES_XP.get(tool, tree);
         }
         if(xp==null||xp.isEmpty())return;
-        boolean applyMods = AURELIUMSKILLS_APPLY_MODIFIERS.get(tool, tree);
+        boolean applyMods = AURASKILLS_APPLY_MODIFIERS.get(tool, tree);
         for(String key : xp.keySet()){
             double amount = xp.get(key);
-            com.archyx.aureliumskills.skills.Skill skill = com.archyx.aureliumskills.api.AureliumAPI.getPlugin().getSkillRegistry().getSkill(key);
+            dev.aurelium.auraskills.api.skill.Skill skill = dev.aurelium.auraskills.api.AuraSkillsApi.get().getGlobalRegistry().getSkill(NamespacedId.fromString(key));
             if(skill==null)continue;
-            HashMap<Player, HashMap<com.archyx.aureliumskills.skills.Skill, Double>> map = null;
+            HashMap<Player, HashMap<dev.aurelium.auraskills.api.skill.Skill, Double>> map = null;
             if(applyMods){
                 map = modsMap;
             }else{
@@ -285,25 +285,23 @@ public class AureliumSkillsCompat extends InternalCompatibility{
             HashMap<Skill, Double> mp = map.get(player);
             mp.put(skill, mp.getOrDefault(skill, 0d)+amount);
         }
-        if(pendingTask==null)pendingTask = new BukkitRunnable() {
-            @Override
-            public void run(){
+        if(pendingTask==null)
+            pendingTask = Scheduler.runLater(() -> {
                 pendingTask = null;
                 for(Player p : noModsMap.keySet()){
                     HashMap<Skill, Double> map = noModsMap.get(p);
-                    for(com.archyx.aureliumskills.skills.Skill skill : map.keySet()){
-                        com.archyx.aureliumskills.api.AureliumAPI.addXpRaw(p, skill, map.get(skill));
+                    for(dev.aurelium.auraskills.api.skill.Skill skill : map.keySet()){
+                        dev.aurelium.auraskills.api.AuraSkillsApi.get().getUser(p.getUniqueId()).addSkillXpRaw(skill, map.get(skill));
                     }
                 }
                 noModsMap.clear();
                 for(Player p : modsMap.keySet()){
                     HashMap<Skill, Double> map = modsMap.get(p);
-                    for(com.archyx.aureliumskills.skills.Skill skill : map.keySet()){
-                        com.archyx.aureliumskills.api.AureliumAPI.addXp(p, skill, map.get(skill));
+                    for(dev.aurelium.auraskills.api.skill.Skill skill : map.keySet()){
+                        dev.aurelium.auraskills.api.AuraSkillsApi.get().getUser(p.getUniqueId()).addSkillXp(skill, map.get(skill));
                     }
                 }
                 modsMap.clear();
-            }
-        }.runTaskLater(treefeller, Option.CUTTING_ANIMATION.get(tool, tree)==true?10:1);
+            }, Option.CUTTING_ANIMATION.get(tool, tree)==true?10:1);
     }
 }
