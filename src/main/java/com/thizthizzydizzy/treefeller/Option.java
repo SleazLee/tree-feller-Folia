@@ -50,7 +50,7 @@ public abstract class Option<E>{
     private static final HashMap<String, String> defaultDropConversions = new HashMap<>();
     private static final HashMap<String, String> defaultBlockConversions = new HashMap<>();
     static{
-        defaultOverridables.add(Material.GRASS);
+        defaultOverridables.add(Material.GRASS_BLOCK);
         defaultOverridables.add(Material.AIR);
         defaultOverridables.add(Material.CAVE_AIR);
         defaultOverridables.add(Material.WATER);
@@ -1833,7 +1833,7 @@ public abstract class Option<E>{
         }
         @Override
         public ItemBuilder getConfigurationDisplayItem(HashSet<Material> value){
-            return new ItemBuilder(Material.GRASS);
+            return new ItemBuilder(Material.GRASS_BLOCK);
         }
         @Override
         public void openGlobalModifyMenu(MenuGlobalConfiguration parent){
@@ -2088,7 +2088,7 @@ public abstract class Option<E>{
         @Override
         public ItemBuilder getConfigurationDisplayItem(Boolean value){
             ItemBuilder builder = new ItemBuilder(Material.IRON_AXE);
-            if(Objects.equals(value, true))builder.enchant(Enchantment.DURABILITY);
+            if(Objects.equals(value, true))builder.enchant(Enchantment.UNBREAKING);
             return builder;
         }
     };
@@ -2155,7 +2155,7 @@ public abstract class Option<E>{
         }
         @Override
         public ItemBuilder getConfigurationDisplayItem(Boolean value){
-            return new ItemBuilder(Material.OAK_LEAVES).enchant(Enchantment.LOOT_BONUS_BLOCKS).addFlag(ItemFlag.HIDE_ENCHANTS);
+            return new ItemBuilder(Material.OAK_LEAVES).enchant(Enchantment.FORTUNE).addFlag(ItemFlag.HIDE_ENCHANTS);
         }
     };
     public static OptionBoolean LEAF_SILK_TOUCH = new OptionBoolean("Leaf Silk Touch", true, true, true, false){
@@ -2175,7 +2175,7 @@ public abstract class Option<E>{
         }
         @Override
         public ItemBuilder getConfigurationDisplayItem(Boolean value){
-            return new ItemBuilder(Material.OAK_LOG).enchant(Enchantment.LOOT_BONUS_BLOCKS).addFlag(ItemFlag.HIDE_ENCHANTS);
+            return new ItemBuilder(Material.OAK_LOG).enchant(Enchantment.FORTUNE).addFlag(ItemFlag.HIDE_ENCHANTS);
         }
     };
     public static OptionBoolean LOG_SILK_TOUCH = new OptionBoolean("Log Silk Touch", true, true, true, true){
@@ -2543,7 +2543,7 @@ public abstract class Option<E>{
         }
         @Override
         public ItemBuilder getConfigurationDisplayItem(ArrayList<Effect> value){
-            return new ItemBuilder(Material.POTION).addFlag(ItemFlag.HIDE_POTION_EFFECTS);
+            return new ItemBuilder(Material.POTION).addFlag(ItemFlag.HIDE_ATTRIBUTES);
         }
         @Override
         public void openGlobalModifyMenu(MenuGlobalConfiguration parent){
@@ -4410,7 +4410,7 @@ public abstract class Option<E>{
         @Override
         public ItemBuilder getConfigurationDisplayItem(Boolean value){
             ItemBuilder builder = new ItemBuilder(Material.CHAIN_COMMAND_BLOCK);
-            if(Objects.equals(value, true))builder.enchant(Enchantment.ARROW_INFINITE);
+            if(Objects.equals(value, true))builder.enchant(Enchantment.INFINITY);
             return builder;
         }
     };
@@ -4764,16 +4764,16 @@ public abstract class Option<E>{
         switch(string.toLowerCase().replaceAll("_", " ")){
             case "power":
             case "arrow damage":
-                return Enchantment.ARROW_DAMAGE;
+                return Enchantment.POWER;
             case "flame":
             case "arrow fire":
-                return Enchantment.ARROW_FIRE;
+                return Enchantment.FLAME;
             case "arrow infinite":
             case "infinity":
-                return Enchantment.ARROW_INFINITE;
+                return Enchantment.INFINITY;
             case "arrow knockback":
             case "punch":
-                return Enchantment.ARROW_KNOCKBACK;
+                return Enchantment.PUNCH;
             case "binding":
             case "binding curse":
             case "curse of binding":
@@ -4782,21 +4782,21 @@ public abstract class Option<E>{
                 return Enchantment.CHANNELING;
             case "sharpness":
             case "damage all":
-                return Enchantment.DAMAGE_ALL;
+                return Enchantment.SHARPNESS;
             case "damage arthropods":
             case "bane of arthropods":
-                return Enchantment.DAMAGE_ARTHROPODS;
+                return Enchantment.BANE_OF_ARTHROPODS;
             case "damage undead":
             case "smite":
-                return Enchantment.DAMAGE_UNDEAD;
+                return Enchantment.SMITE;
             case "depth strider":
                 return Enchantment.DEPTH_STRIDER;
             case "efficiency":
             case "dig speed":
-                return Enchantment.DIG_SPEED;
+                return Enchantment.EFFICIENCY;
             case "durability":
             case "unbreaking":
-                return Enchantment.DURABILITY;
+                return Enchantment.UNBREAKING;
             case "fire aspect":
                 return Enchantment.FIRE_ASPECT;
             case "frost walker":
@@ -4807,38 +4807,38 @@ public abstract class Option<E>{
                 return Enchantment.KNOCKBACK;
             case "fortune":
             case "loot bonus blocks":
-                return Enchantment.LOOT_BONUS_BLOCKS;
+                return Enchantment.FORTUNE;
             case "looting":
             case "loot bonus mobs":
-                return Enchantment.LOOT_BONUS_MOBS;
+                return Enchantment.LOOTING;
             case "loyalty":
                 return Enchantment.LOYALTY;
             case "luck":
             case "luck of the sea":
-                return Enchantment.LUCK;
+                return Enchantment.LUCK_OF_THE_SEA;
             case "lure":
                 return Enchantment.LURE;
             case "mending":
                 return Enchantment.MENDING;
             case "oxygen":
             case "respiration":
-                return Enchantment.OXYGEN;
+                return Enchantment.RESPIRATION;
             case "protection environmental":
             case "protection":
-                return Enchantment.PROTECTION_ENVIRONMENTAL;
+                return Enchantment.PROTECTION;
             case "protection explosions":
             case "blast protection":
-                return Enchantment.PROTECTION_EXPLOSIONS;
+                return Enchantment.BLAST_PROTECTION;
             case "protection fall":
             case "feather falling":
             case "feather fall":
-                return Enchantment.PROTECTION_FALL;
+                return Enchantment.FEATHER_FALLING;
             case "protection fire":
             case "fire protection":
-                return Enchantment.PROTECTION_FIRE;
+                return Enchantment.FIRE_PROTECTION;
             case "protection projectile":
             case "projectile protection":
-                return Enchantment.PROTECTION_PROJECTILE;
+                return Enchantment.PROJECTILE_PROTECTION;
             case "riptide":
                 return Enchantment.RIPTIDE;
             case "silk touch":
@@ -4854,7 +4854,7 @@ public abstract class Option<E>{
                 return Enchantment.VANISHING_CURSE;
             case "water worker":
             case "aqua affinity":
-                return Enchantment.WATER_WORKER;
+                return Enchantment.AQUA_AFFINITY;
             default:
                 if(string.contains(":")){
                     String[] strs = string.split("\\:");

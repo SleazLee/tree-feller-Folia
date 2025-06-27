@@ -166,7 +166,7 @@ public class Effect{
                 s+=", speed: "+effect.speed;
                 s+=", count: "+effect.count;
                 switch(effect.particle){
-                    case REDSTONE:
+                    case DUST:
                         Particle.DustOptions options = (Particle.DustOptions)effect.extra;
                         Color color = options.getColor();
                         s+=", r: "+color.getRed();
@@ -174,11 +174,10 @@ public class Effect{
                         s+=", b: "+color.getBlue();
                         s+=", size: "+options.getSize();
                         break;
-                    case ITEM_CRACK:
+                    case ITEM:
                         s+="item: "+((ItemStack)effect.extra).getType().name();
                         break;
-                    case BLOCK_CRACK:
-                    case BLOCK_DUST:
+                    case BLOCK:
                     case FALLING_DUST:
                         s+=", block: "+((BlockData)effect.extra).getMaterial().name();
                         break;
@@ -222,14 +221,13 @@ public class Effect{
                 }
                 Object extra = null;
                 switch(particle){
-                    case REDSTONE:
+                    case DUST:
                         extra = new Particle.DustOptions(Color.fromRGB(((Number)map.get("r")).intValue(), ((Number)map.get("g")).intValue(), ((Number)map.get("b")).intValue()), ((Number)map.get("size")).floatValue());
                         break;
-                    case ITEM_CRACK:
+                    case ITEM:
                         extra = new ItemStack(Material.matchMaterial((String)map.get("item")));
                         break;
-                    case BLOCK_CRACK:
-                    case BLOCK_DUST:
+                    case BLOCK:
                     case FALLING_DUST:
                         extra = Bukkit.createBlockData(Material.matchMaterial((String)map.get("block")));
                         break;

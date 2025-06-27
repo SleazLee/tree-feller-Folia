@@ -158,7 +158,7 @@ public class MenuEffectConfiguration extends Menu{
                     }));
                 }));
                 switch(effect.particle){
-                    case REDSTONE:
+                    case DUST:
                         add(new Button(13, new ItemBuilder(Material.RED_DYE).setDisplayName("Red").addLore(effect.extra==null?"null":((Particle.DustOptions)effect.extra).getColor().getRed()+""), (click) -> {
                             if(click==ClickType.LEFT)open(new MenuModifyInteger(this, plugin, player, effect.name, 0, 255, false, effect.extra==null?0:((Particle.DustOptions)effect.extra).getColor().getRed(), (value) -> {
                                 int g = 0;
@@ -216,7 +216,7 @@ public class MenuEffectConfiguration extends Menu{
                             }));
                         }));
                         break;
-                    case ITEM_CRACK:
+                    case ITEM:
                         add(new Button(13, new ItemBuilder(Material.IRON_PICKAXE).setDisplayName("Item").addLore(effect.extra==null?"null":((ItemStack)effect.extra).getType().toString()), (click) -> {
                             if(click==ClickType.LEFT)open(new MenuModifyMaterial(this, plugin, player, effect.name, false, "item", effect.extra==null?Material.IRON_PICKAXE:((ItemStack)effect.extra).getType(), (mat) -> {
                                 return mat.isItem();
@@ -225,8 +225,7 @@ public class MenuEffectConfiguration extends Menu{
                             }));
                         }));
                         break;
-                    case BLOCK_CRACK:
-                    case BLOCK_DUST:
+                    case BLOCK:
                     case FALLING_DUST:
                         add(new Button(13, new ItemBuilder(Material.IRON_PICKAXE).setDisplayName("Block").addLore(effect.extra==null?"null":((BlockData)effect.extra).getMaterial().toString()), (click) -> {
                             if(click==ClickType.LEFT)open(new MenuModifyMaterial(this, plugin, player, effect.name, false, "block", effect.extra==null?Material.STONE:((BlockData)effect.extra).getMaterial(), (mat) -> {

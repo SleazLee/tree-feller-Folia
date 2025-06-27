@@ -18,7 +18,7 @@ public class TreeFellerEventListener implements Listener{
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event){
         Entity damager = event.getDamager();
-        if(event.getEntity().getType()==EntityType.DROPPED_ITEM&&damager.getType()==EntityType.FALLING_BLOCK&&damager.getScoreboardTags().contains("tree_feller"))event.setCancelled(true);
+        if(event.getEntity().getType()==EntityType.ITEM&&damager.getType()==EntityType.FALLING_BLOCK&&damager.getScoreboardTags().contains("tree_feller"))event.setCancelled(true);
     }
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){

@@ -39,7 +39,7 @@ public class MenuConfiguration extends Menu{
         add(new Button(15, makeItem(Material.OAK_SAPLING).setDisplayName("Trees").setCount(TreeFeller.trees.size()), (click) -> {
             if(click==ClickType.LEFT)open(new MenuTreesConfiguration(this, plugin, player));
         }));
-        add(new Button(21, makeItem(Material.POTION).setDisplayName("Effects").setCount(TreeFeller.effects.size()).addFlag(ItemFlag.HIDE_POTION_EFFECTS), (click) -> {
+        add(new Button(21, makeItem(Material.POTION).setDisplayName("Effects").setCount(TreeFeller.effects.size()).addFlag(ItemFlag.HIDE_ATTRIBUTES), (click) -> {
             if(click==ClickType.LEFT)open(new MenuEffectsConfiguration(this, plugin, player));
         }));
         add(new Button(23, makeItem(Material.PAPER).setDisplayName("Messages").setCount(Message.messages.size()), (click) -> {

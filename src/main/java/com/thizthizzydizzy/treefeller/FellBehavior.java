@@ -288,7 +288,7 @@ public enum FellBehavior{
     
     /**
      * @param b The block in question
-     * @param bottomLog Bottommost log of the tree
+     * @param bottomLogY Bottommost log of the tree
      * @param fallDirection Normalised direction the block should fall. Y component must be zero.
      * @param yVelocity The initial y velocity this block should be given.
      * @return The velocity that should be applied to the falling block

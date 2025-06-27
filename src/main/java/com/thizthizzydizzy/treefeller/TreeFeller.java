@@ -123,7 +123,7 @@ public class TreeFeller extends JavaPlugin{
             if(Option.DAMAGE_MULT.treeValues.containsKey(tree))durabilityCost*=Option.DAMAGE_MULT.treeValues.get(tree);
             if(Option.DAMAGE_MULT.toolValues.containsKey(tool))durabilityCost*=Option.DAMAGE_MULT.toolValues.get(tool);
             if(Option.RESPECT_UNBREAKING.get(tool, tree)){
-                durabilityCost/=(axe.getEnchantmentLevel(Enchantment.DURABILITY)+1);
+                durabilityCost/=(axe.getEnchantmentLevel(Enchantment.UNBREAKING)+1);
                 if(durabilityCost<1)durabilityCost++;
             }
             if(Option.RESPECT_UNBREAKABLE.get(tool, tree)&&unbreakable)durabilityCost = 0;
@@ -162,7 +162,7 @@ public class TreeFeller extends JavaPlugin{
         if(Option.DAMAGE_MULT.treeValues.containsKey(tree))durabilityCost*=Option.DAMAGE_MULT.treeValues.get(tree);
         if(Option.DAMAGE_MULT.toolValues.containsKey(tool))durabilityCost*=Option.DAMAGE_MULT.toolValues.get(tool);
         if(Option.RESPECT_UNBREAKING.get(tool, tree)){
-            durabilityCost/=(axe.getEnchantmentLevel(Enchantment.DURABILITY)+1);
+            durabilityCost/=(axe.getEnchantmentLevel(Enchantment.UNBREAKING)+1);
             if(durabilityCost<1)durabilityCost++;
         }
         if(Option.RESPECT_UNBREAKABLE.get(tool, tree)&&unbreakable)durabilityCost = 0;
@@ -665,66 +665,65 @@ public class TreeFeller extends JavaPlugin{
         switch(string.toLowerCase().replace("_", " ").replace("-", " ")){
             case "block":
 //                return Particle.BLOCK_CRACK;
-                return Particle.BLOCK_DUST;
+                return Particle.BLOCK;
             case "enchanted hit":
-                return Particle.CRIT_MAGIC;
+                return Particle.ENCHANTED_HIT;
             case "dripping lava":
-                return Particle.DRIP_LAVA;
+                return Particle.DRIPPING_LAVA;
             case "dripping water":
-                return Particle.DRIP_WATER;
+                return Particle.DRIPPING_WATER;
             case "enchant":
-                return Particle.ENCHANTMENT_TABLE;
+                return Particle.ENCHANT;
             case "explosion emitter":
-                return Particle.EXPLOSION_HUGE;
+                return Particle.EXPLOSION_EMITTER;
             case "explode":
-                return Particle.EXPLOSION_LARGE;
+                return Particle.EXPLOSION;
             case "poof":
-                return Particle.EXPLOSION_NORMAL;
+                return Particle.POOF;
             case "firework":
-                return Particle.FIREWORKS_SPARK;
+                return Particle.FIREWORK;
             case "item":
-                return Particle.ITEM_CRACK;
+                return Particle.ITEM;
             case "elder guardian":
-                return Particle.MOB_APPEARANCE;
+                return Particle.ELDER_GUARDIAN;
             case "dust":
-                return Particle.REDSTONE;
+                return Particle.DUST;
             case "item slime":
-                return Particle.SLIME;
+                return Particle.ITEM_SLIME;
             case "large smoke":
-                return Particle.SMOKE_LARGE;
+                return Particle.LARGE_SMOKE;
             case "smoke":
-                return Particle.SMOKE_NORMAL;
+                return Particle.SMOKE;
             case "item snowball":
-                return Particle.SNOWBALL;
+                return Particle.ITEM_SNOWBALL;
             case "effect":
-                return Particle.SPELL;
+                return Particle.EFFECT;
             case "instant effect":
-                return Particle.SPELL_INSTANT;
+                return Particle.INSTANT_EFFECT;
             case "entity effect":
-                return Particle.SPELL_MOB;
+                return Particle.ENTITY_EFFECT;
             case "mob spell ambient":
             case "ambient entity effect":
-                return Particle.SPELL_MOB_AMBIENT;
             case "witch":
-                return Particle.SPELL_WITCH;
+                return Particle.WITCH;
             case "underwater":
-                return Particle.SUSPENDED;
+                return Particle.UNDERWATER;
             case "totem of undying":
-                return Particle.TOTEM;
+                return Particle.TOTEM_OF_UNDYING;
             case "mycelium":
-                return Particle.TOWN_AURA;
+                return Particle.MYCELIUM;
             case "angry villager":
-                return Particle.VILLAGER_ANGRY;
+                return Particle.ANGRY_VILLAGER;
             case "happy villager":
-                return Particle.VILLAGER_HAPPY;
+                return Particle.HAPPY_VILLAGER;
             case "bubble":
-                return Particle.WATER_BUBBLE;
+                return Particle.BUBBLE;
             case "rain":
-                return Particle.WATER_DROP;
+                return Particle.RAIN;
             case "splash":
-                return Particle.WATER_SPLASH;
+                return Particle.SPLASH;
             case "fishing":
-                return Particle.WATER_WAKE;
+                return Particle.FISHING;
             default:
                 return null;
         }
