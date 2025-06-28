@@ -1009,14 +1009,14 @@ public class TreeFeller extends JavaPlugin{
                         HashSet<Material> allLeaves = new HashSet<>();
                         HashSet<Material> allTrunks = new HashSet<>();
                         int maxRange = 0;
-                        boolean diagonal = false, player = false, ignoreData = false;
-                        for(Tree tree : trees){
-                            allLeaves.addAll(tree.leaves);
-                            allTrunks.addAll(tree.trunk);
-                            int range = Option.LEAF_DETECT_RANGE.get(cascade.tool, tree);
+                        boolean diagonal = false, playerLeaves = false, ignoreData = false;
+                        for(Tree cascadeTree : trees){
+                            allLeaves.addAll(cascadeTree.leaves);
+                            allTrunks.addAll(cascadeTree.trunk);
+                            int range = Option.LEAF_DETECT_RANGE.get(cascade.tool, cascadeTree);
                             if(range>maxRange)maxRange = range;
-                            if(Option.DIAGONAL_LEAVES.get(cascade.tool, tree))diagonal = true;
-                            if(Option.PLAYER_LEAVES.get(cascade.tool, cascade.tree))player = true;
+                            if(Option.DIAGONAL_LEAVES.get(cascade.tool, cascadeTree))diagonal = true;
+                            if(Option.PLAYER_LEAVES.get(cascade.tool, cascade.tree))playerLeaves = true;
                             if(Option.IGNORE_LEAF_DATA.get(cascade.tool, cascade.tree))ignoreData = true;
                         }
                         HashSet<Block> prevTrunks = new HashSet<>(toList(cascade.detectedTree.trunk));
@@ -1025,7 +1025,7 @@ public class TreeFeller extends JavaPlugin{
                         for(BlockFace dir : directions){
                             Block start = cascade.block.getRelative(dir);
                             if(prevLeaves.contains(start)||prevTrunks.contains(start))continue;
-                            ArrayList<Block> detectedLeaves = toList(getBlocks(new ArrayList<>(allLeaves), start, maxRange, 64, diagonal, player, ignoreData, true));
+                            ArrayList<Block> detectedLeaves = toList(getBlocks(new ArrayList<>(allLeaves), start, maxRange, 64, diagonal, playerLeaves, ignoreData, true));
                             HashSet<Block> trunks = new HashSet<>();
                             for(Block b : detectedLeaves){
                                 if(prevLeaves.contains(b))continue;

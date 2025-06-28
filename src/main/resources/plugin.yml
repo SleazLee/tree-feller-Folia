@@ -1,10 +1,10 @@
 main: com.thizthizzydizzy.treefeller.TreeFeller
 version: 1.26.2
-api-version: 1.16
+api-version: "1.21.5"
 folia-supported: true
 author: ThizThizzyDizzy
 website: "https://www.spigotmc.org/resources/thizzyz-tree-feller.64346/"
-name: TreeFeller
+name: TreeFeller-Folia
 commands:
     treefeller:
         description: TreeFeller commands
@@ -12,4 +12,5 @@ commands:
 softdepend:
   - mcMMO
   - Lands
-  
+  - CoreProtect
+  - Drop2Inventory
