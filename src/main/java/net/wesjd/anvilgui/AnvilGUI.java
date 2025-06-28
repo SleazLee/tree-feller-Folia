@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import net.wesjd.anvilgui.version.VersionMatcher;
 import net.wesjd.anvilgui.version.VersionWrapper;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -566,7 +566,6 @@ public class AnvilGUI {
          * @param json The title that is to be displayed to the user
          * @return The {@link Builder} instance
          * @throws IllegalArgumentException if the title is null
-         * @see net.md_5.bungee.chat.ComponentSerializer#toString(BaseComponent)
          */
         public Builder jsonTitle(String json) {
             Validate.notNull(json, "json cannot be null");
